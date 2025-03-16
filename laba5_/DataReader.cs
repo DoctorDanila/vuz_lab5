@@ -23,7 +23,6 @@ namespace LabWork
                     {
                         var currentRow = worksheet.GetRow(row);
                         if (currentRow != null)
-                        {
                             movements.Add(new ProductMovement
                             {
                                 OperationID = GetIntValue(currentRow.GetCell(0)),
@@ -34,7 +33,6 @@ namespace LabWork
                                 PackageCount = GetIntValue(currentRow.GetCell(5)),
                                 HasCustomerCard = GetStringValue(currentRow.GetCell(6)) == "Да"
                             });
-                        }
                     }
                 }
             }
@@ -58,20 +56,18 @@ namespace LabWork
                 using (var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
                 {
                     var workbook = new HSSFWorkbook(stream); 
-                    var worksheet = workbook.GetSheetAt(1); 
+                    var worksheet = workbook.GetSheetAt(2); 
 
                     for (int row = 1; row <= worksheet.LastRowNum; row++) 
                     {
                         var currentRow = worksheet.GetRow(row);
                         if (currentRow != null)
-                        {
                             categories.Add(new Category
                             {
                                 ID = GetIntValue(currentRow.GetCell(0)),
                                 Name = GetStringValue(currentRow.GetCell(1)),
                                 AgeRestriction = GetStringValue(currentRow.GetCell(2))
                             });
-                        }
                     }
                 }
             }
@@ -95,20 +91,18 @@ namespace LabWork
                 using (var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
                 {
                     var workbook = new HSSFWorkbook(stream); 
-                    var worksheet = workbook.GetSheetAt(2); 
+                    var worksheet = workbook.GetSheetAt(3); 
 
                     for (int row = 1; row <= worksheet.LastRowNum; row++) 
                     {
                         var currentRow = worksheet.GetRow(row);
                         if (currentRow != null)
-                        {
                             stores.Add(new Store
                             {
                                 ID = GetStringValue(currentRow.GetCell(0)),
                                 District = GetStringValue(currentRow.GetCell(1)),
                                 Address = GetStringValue(currentRow.GetCell(2))
                             });
-                        }
                     }
                 }
             }
@@ -132,13 +126,12 @@ namespace LabWork
                 using (var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
                 {
                     var workbook = new HSSFWorkbook(stream);
-                    var worksheet = workbook.GetSheetAt(3); 
+                    var worksheet = workbook.GetSheetAt(1); 
 
                     for (int row = 1; row <= worksheet.LastRowNum; row++)
                     {
                         var currentRow = worksheet.GetRow(row);
                         if (currentRow != null)
-                        {
                             products.Add(new Product
                             {
                                 Article = GetStringValue(currentRow.GetCell(0)),
@@ -148,7 +141,6 @@ namespace LabWork
                                 PackageQuantity = GetIntValue(currentRow.GetCell(4)),
                                 PackagePrice = GetDecimalValue(currentRow.GetCell(5))
                             });
-                        }
                     }
                 }
             }
@@ -166,14 +158,11 @@ namespace LabWork
 
         private static int GetIntValue(ICell cell)
         {
-            if (cell == null || cell.CellType == CellType.Blank)
-                return 0;
+            if (cell == null || cell.CellType == CellType.Blank) return 0;
 
-            if (cell.CellType == CellType.Numeric)
-                return (int)cell.NumericCellValue;
+            if (cell.CellType == CellType.Numeric) return (int)cell.NumericCellValue;
 
-            if (cell.CellType == CellType.String && int.TryParse(cell.StringCellValue, out int result))
-                return result;
+            if (cell.CellType == CellType.String && int.TryParse(cell.StringCellValue, out int result)) return result;
 
             return 0;
         }
@@ -188,24 +177,15 @@ namespace LabWork
 
             try
             {
-                if (cell.CellType == CellType.Numeric && DateUtil.IsCellDateFormatted(cell))
-                {
-                    return cell.DateCellValue ?? DateTime.MinValue; 
-                }
+                if (cell.CellType == CellType.Numeric && DateUtil.IsCellDateFormatted(cell)) return cell.DateCellValue ?? DateTime.MinValue; 
 
                 if (cell.CellType == CellType.String)
                 {
                     string cellValue = cell.StringCellValue;
 
-                    if (DateTime.TryParseExact(cellValue, "dd.MM.yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime result))
-                    {
-                        return result;
-                    }
+                    if (DateTime.TryParseExact(cellValue, "dd.MM.yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime result)) return result;
 
-                    if (DateTime.TryParseExact(cellValue, "M.d.yy", CultureInfo.InvariantCulture, DateTimeStyles.None, out result))
-                    {
-                        return result;
-                    }
+                    if (DateTime.TryParseExact(cellValue, "M.d.yy", CultureInfo.InvariantCulture, DateTimeStyles.None, out result)) return result;
                 }
 
                 if (cell.CellType == CellType.Numeric)
@@ -224,28 +204,22 @@ namespace LabWork
         }
         private static string GetStringValue(ICell cell)
         {
-            if (cell == null || cell.CellType == CellType.Blank)
-                return string.Empty;
+            if (cell == null || cell.CellType == CellType.Blank) return string.Empty;
 
-            if (cell.CellType == CellType.String)
-                return cell.StringCellValue;
+            if (cell.CellType == CellType.String) return cell.StringCellValue;
 
-            if (cell.CellType == CellType.Numeric)
-                return cell.NumericCellValue.ToString();
+            if (cell.CellType == CellType.Numeric) return cell.NumericCellValue.ToString();
 
             return string.Empty;
         }
 
         private static decimal GetDecimalValue(ICell cell)
         {
-            if (cell == null || cell.CellType == CellType.Blank)
-                return 0m;
+            if (cell == null || cell.CellType == CellType.Blank) return 0m;
 
-            if (cell.CellType == CellType.Numeric)
-                return (decimal)cell.NumericCellValue;
+            if (cell.CellType == CellType.Numeric) return (decimal)cell.NumericCellValue;
 
-            if (cell.CellType == CellType.String && decimal.TryParse(cell.StringCellValue, out decimal result))
-                return result;
+            if (cell.CellType == CellType.String && decimal.TryParse(cell.StringCellValue, out decimal result)) return result;
 
             return 0m;
         }

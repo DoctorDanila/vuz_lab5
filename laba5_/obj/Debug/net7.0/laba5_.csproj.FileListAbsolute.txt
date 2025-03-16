@@ -102,3 +102,4 @@ C:\Users\имя\Desktop\C#\laba5_\laba5_\obj\Debug\net7.0\refint\laba5_.dll
 C:\Users\имя\Desktop\C#\laba5_\laba5_\obj\Debug\net7.0\laba5_.pdb
 C:\Users\имя\Desktop\C#\laba5_\laba5_\obj\Debug\net7.0\laba5_.genruntimeconfig.cache
 C:\Users\имя\Desktop\C#\laba5_\laba5_\obj\Debug\net7.0\ref\laba5_.dll
+C:\Users\имя\Desktop\C#\laba5_\laba5_\obj\Debug\net7.0\laba5_.sourcelink.json

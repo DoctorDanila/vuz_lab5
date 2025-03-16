@@ -21,8 +21,7 @@ namespace LabWork
             for (int row = worksheet.LastRowNum; row >= 1; row--)
             {
                 var currentRow = worksheet.GetRow(row);
-                if (currentRow != null)
-                    worksheet.RemoveRow(currentRow);
+                if (currentRow != null) worksheet.RemoveRow(currentRow);
             }
 
             // новые данные

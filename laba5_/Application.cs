@@ -151,13 +151,19 @@ namespace LabWork
             Console.WriteLine("Товары, проданные в магазине Р7:");
             foreach (var product in salesInStore) Console.WriteLine(product);
 
-            // Запрос 2: Общая стоимость товаров из категории "Игрушки на радиоуправлении 12+"
-            var totalCost = (from m in movements
+            // Запрос 2: Общая стоимость проданных товаров из категории "Игрушки на радиоуправлении 12+"
+            var specialCost = (from m in movements
                              join p in products on m.Article equals p.Article
                              join c in categories on p.CategoryID equals c.ID
-                             where c.Name == "Игрушки на радиоуправлении" && c.AgeRestriction == "12+" && m.OperationType == "Продажа"
-                             select p.PackagePrice * m.PackageCount).Sum();
-            Console.WriteLine($"Общая стоимость товаров из категории 'Игрушки на радиоуправлении 12+': {totalCost}");
+                             where c.Name == "Игрушки на радиоуправлении" && c.AgeRestriction == "12+" && m.OperationType == "Продажа" && m.HasCustomerCard == true
+                             select p.PackageQuantity * m.PackageCount * p.PackagePrice).Sum();
+            var defCost = (from m in movements
+                             join p in products on m.Article equals p.Article
+                             join c in categories on p.CategoryID equals c.ID
+                             where c.Name == "Игрушки на радиоуправлении" && c.AgeRestriction == "12+" && m.OperationType == "Продажа" && m.HasCustomerCard == false
+                           select p.PackageQuantity * m.PackageCount).Sum();
+            var totalCost = specialCost + defCost;
+            Console.WriteLine($"Общая стоимость проданных товаров из категории 'Игрушки на радиоуправлении 12+': {totalCost}");
 
             // Запрос 3: Магазины, в которых продавались товары из категории "Куклы"
             var storesWithDolls = (from m in movements
